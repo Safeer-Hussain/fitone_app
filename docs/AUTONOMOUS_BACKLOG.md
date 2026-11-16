@@ -21,7 +21,7 @@ This document maintains 25 high-value engineering upgrades for the Fitone mobile
 - [x] **Sprint 05: Custom Superset & Drop Set Builder**
   - Extend the workout logger to support linking two exercises into an antagonist superset or multi-stage drop set with automated back-to-back timer tracking.
 
-- [ ] **Sprint 06: Wilks & DOTS Powerlifting Score Calculator**
+- [x] **Sprint 06: Wilks & DOTS Powerlifting Score Calculator**
   - Implement standard Wilks-2 and DOTS powerlifting coefficient calculators using bodyweight, gender, and total compound volume (Squat + Bench + Deadlift).
 
 - [ ] **Sprint 07: Audio Cadence Metronome for Running**

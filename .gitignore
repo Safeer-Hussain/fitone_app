@@ -51,3 +51,5 @@ devtools_options.yaml
 /android/build/
 **/android/build/
 **/android/.gradle/
+/fitone/
+fitone

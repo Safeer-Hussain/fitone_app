@@ -9,6 +9,7 @@ import '../stores/exercise_store.dart';
 import '../stores/workout_logger_store.dart';
 import '../widgets/barbell_plate_calculator_sheet.dart';
 import '../widgets/one_rm_calculator_sheet.dart';
+import '../widgets/powerlifting_calculator_sheet.dart';
 import '../widgets/rest_timer_dialog.dart';
 import '../widgets/superset_drop_set_dialog.dart';
 
@@ -190,6 +191,17 @@ class _WorkoutLoggerViewState extends State<WorkoutLoggerView> {
                 ),
                 icon: Icon(Icons.layers_outlined, color: colorScheme.tertiary),
                 tooltip: 'Superset & Drop Set Builder',
+              ),
+              IconButton(
+                key: const ValueKey(
+                  'workout_open_powerlifting_calculator_button',
+                ),
+                onPressed: () => PowerliftingCalculatorSheet.show(context),
+                icon: Icon(
+                  Icons.sports_score_rounded,
+                  color: colorScheme.primary,
+                ),
+                tooltip: 'Wilks & DOTS Score Calculator',
               ),
               IconButton(
                 onPressed: () => OneRmCalculatorSheet.show(context),

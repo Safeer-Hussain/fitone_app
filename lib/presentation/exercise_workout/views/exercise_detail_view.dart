@@ -7,6 +7,7 @@ import '../../../domain/entities/exercise.dart';
 import '../stores/workout_logger_store.dart';
 import '../widgets/barbell_plate_calculator_sheet.dart';
 import '../widgets/one_rm_calculator_sheet.dart';
+import '../widgets/powerlifting_calculator_sheet.dart';
 import 'workout_logger_view.dart';
 
 class ExerciseDetailView extends StatelessWidget {
@@ -193,6 +194,24 @@ class ExerciseDetailView extends StatelessWidget {
             ),
           ),
         ),
+        const SizedBox(height: 12),
+        SizedBox(
+          width: double.infinity,
+          child: OutlinedButton.icon(
+            key: const ValueKey('open_powerlifting_calculator_detail_button'),
+            onPressed: () => PowerliftingCalculatorSheet.show(context),
+            icon: const Icon(Icons.sports_score_rounded, size: 18),
+            label: const Text('Wilks & DOTS Score Calculator'),
+            style: OutlinedButton.styleFrom(
+              foregroundColor: colorScheme.onSurface,
+              side: BorderSide(color: colorScheme.outlineVariant),
+              padding: const EdgeInsets.symmetric(vertical: 14),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+          ),
+        ),
       ],
     );
 
@@ -200,6 +219,12 @@ class ExerciseDetailView extends StatelessWidget {
       appBar: AppBar(
         title: Text(exercise.name),
         actions: [
+          IconButton(
+            key: const ValueKey('powerlifting_calculator_detail_appbar_button'),
+            onPressed: () => PowerliftingCalculatorSheet.show(context),
+            icon: Icon(Icons.sports_score_rounded, color: colorScheme.primary),
+            tooltip: 'Wilks & DOTS Calculator',
+          ),
           IconButton(
             key: const ValueKey('plate_calculator_detail_appbar_button'),
             onPressed: () => BarbellPlateCalculatorSheet.show(context),
