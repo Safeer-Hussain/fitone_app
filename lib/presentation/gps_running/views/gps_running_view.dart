@@ -7,6 +7,7 @@ import '../../../core/di/injection.dart';
 import '../../../core/theme/theme_store.dart';
 import '../../../core/utils/app_feedback.dart';
 import '../stores/gps_running_store.dart';
+import '../widgets/cadence_metronome_sheet.dart';
 import '../widgets/gpx_export_dialog.dart';
 import '../widgets/run_summary_sheet.dart';
 import '../widgets/running_metrics_overlay.dart';
@@ -208,6 +209,19 @@ class _GpsRunningViewState extends State<GpsRunningView> {
               ),
             ),
             actions: [
+              IconButton(
+                key: const ValueKey('gps_cadence_metronome_appbar_button'),
+                onPressed: () =>
+                    CadenceMetronomeSheet.show(context, store: _store),
+                icon: Icon(
+                  Icons.speed_rounded,
+                  color: _store.isMetronomeEnabled
+                      ? colorScheme.primary
+                      : colorScheme.onSurfaceVariant,
+                  size: isLandscape ? 18 : 22,
+                ),
+                tooltip: 'Cadence Metronome',
+              ),
               IconButton(
                 onPressed: () => _showHistorySheet(context, colorScheme),
                 icon: Icon(

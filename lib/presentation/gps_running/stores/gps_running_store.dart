@@ -1,8 +1,10 @@
 import 'dart:async';
 
+import 'package:flutter/services.dart';
 import 'package:mobx/mobx.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../domain/entities/cadence_metronome.dart';
 import '../../../domain/entities/run_record.dart';
 import '../../../domain/repositories/ring_repository.dart';
 import '../../../domain/repositories/running_repository.dart';
@@ -51,6 +53,34 @@ class GpsRunningStore {
 
   final _pastRuns = ObservableList<RunRecord>();
   List<RunRecord> get pastRuns => _pastRuns;
+
+  // --- Cadence Metronome Observables ---
+  final _isMetronomeEnabled = Observable<bool>(false);
+  bool get isMetronomeEnabled => _isMetronomeEnabled.value;
+
+  final _cadenceSpm = Observable<int>(175);
+  int get cadenceSpm => _cadenceSpm.value;
+
+  final _metronomeAudioEnabled = Observable<bool>(true);
+  bool get metronomeAudioEnabled => _metronomeAudioEnabled.value;
+
+  final _metronomeHapticEnabled = Observable<bool>(true);
+  bool get metronomeHapticEnabled => _metronomeHapticEnabled.value;
+
+  final _metronomeBeat = Observable<int>(0);
+  int get metronomeBeat => _metronomeBeat.value;
+
+  final _isBeatFlash = Observable<bool>(false);
+  bool get isBeatFlash => _isBeatFlash.value;
+
+  CadenceMetronomeConfig get metronomeConfig => CadenceMetronomeConfig(
+    spm: _cadenceSpm.value,
+    isEnabled: _isMetronomeEnabled.value,
+    audioEnabled: _metronomeAudioEnabled.value,
+    hapticEnabled: _metronomeHapticEnabled.value,
+  );
+
+  Timer? _metronomeTimer;
 
   Timer? _timer;
   int _simulationIndex = 0;
@@ -174,10 +204,93 @@ class GpsRunningStore {
 
   void pauseRun() {
     runInAction(() => _isPaused.value = true);
+    if (_isMetronomeEnabled.value) {
+      _metronomeTimer?.cancel();
+    }
   }
 
   void resumeRun() {
     runInAction(() => _isPaused.value = false);
+    if (_isMetronomeEnabled.value) {
+      _restartMetronomeTimer();
+    }
+  }
+
+  void setCadenceSpm(int spm) {
+    runInAction(() {
+      _cadenceSpm.value = spm.clamp(140, 220);
+    });
+    if (_isMetronomeEnabled.value) {
+      _restartMetronomeTimer();
+    }
+  }
+
+  void toggleMetronome() {
+    if (_isMetronomeEnabled.value) {
+      stopMetronome();
+    } else {
+      startMetronome();
+    }
+  }
+
+  void startMetronome() {
+    runInAction(() {
+      _isMetronomeEnabled.value = true;
+      _metronomeBeat.value = 0;
+    });
+    _restartMetronomeTimer();
+  }
+
+  void stopMetronome() {
+    _metronomeTimer?.cancel();
+    _metronomeTimer = null;
+    runInAction(() {
+      _isMetronomeEnabled.value = false;
+      _isBeatFlash.value = false;
+    });
+  }
+
+  void toggleMetronomeAudio() {
+    runInAction(() {
+      _metronomeAudioEnabled.value = !_metronomeAudioEnabled.value;
+    });
+  }
+
+  void toggleMetronomeHaptic() {
+    runInAction(() {
+      _metronomeHapticEnabled.value = !_metronomeHapticEnabled.value;
+    });
+  }
+
+  void _restartMetronomeTimer() {
+    _metronomeTimer?.cancel();
+    final intervalMs = (60000 / _cadenceSpm.value.clamp(140, 220)).round();
+
+    _metronomeTimer = Timer.periodic(Duration(milliseconds: intervalMs), (
+      timer,
+    ) {
+      runInAction(() {
+        _metronomeBeat.value = (_metronomeBeat.value + 1) % 4;
+        _isBeatFlash.value = true;
+      });
+
+      if (_metronomeAudioEnabled.value) {
+        try {
+          SystemSound.play(SystemSoundType.click);
+        } catch (_) {}
+      }
+      if (_metronomeHapticEnabled.value) {
+        try {
+          HapticFeedback.selectionClick();
+        } catch (_) {}
+      }
+
+      Future.delayed(const Duration(milliseconds: 70), () {
+        runInAction(() {
+          _isBeatFlash.value = false;
+        });
+      });
+    });
   }
 
   Future<RunRecord?> finishAndSaveRun({
@@ -185,6 +298,7 @@ class GpsRunningStore {
   }) async {
     _timer?.cancel();
     _timer = null;
+    stopMetronome();
 
     final record = RunRecord(
       id: const Uuid().v4(),
@@ -217,6 +331,7 @@ class GpsRunningStore {
   void cancelRun() {
     _timer?.cancel();
     _timer = null;
+    stopMetronome();
     runInAction(() {
       _isTracking.value = false;
       _isSimulating.value = false;
@@ -238,6 +353,7 @@ class GpsRunningStore {
 
   void dispose() {
     _timer?.cancel();
+    _metronomeTimer?.cancel();
     _ringSub?.cancel();
   }
 }

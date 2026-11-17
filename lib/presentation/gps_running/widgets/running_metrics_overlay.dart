@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
 import '../stores/gps_running_store.dart';
+import 'cadence_metronome_sheet.dart';
 
 class RunningMetricsOverlay extends StatelessWidget {
   final GpsRunningStore store;
@@ -67,6 +69,64 @@ class RunningMetricsOverlay extends StatelessWidget {
                     ),
                   ],
                 ),
+              ),
+              Observer(
+                builder: (_) {
+                  final isMetronomeOn = store.isMetronomeEnabled;
+                  final spm = store.cadenceSpm;
+                  final isFlash = store.isBeatFlash;
+                  return InkWell(
+                    key: const ValueKey('cadence_metronome_overlay_chip'),
+                    borderRadius: BorderRadius.circular(8),
+                    onTap: () =>
+                        CadenceMetronomeSheet.show(context, store: store),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: isCompact ? 6 : 8,
+                        vertical: isCompact ? 2 : 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: isMetronomeOn
+                            ? (isFlash
+                                  ? colorScheme.primary.withValues(alpha: 0.35)
+                                  : colorScheme.primary.withValues(alpha: 0.18))
+                            : colorScheme.surfaceContainerHighest.withValues(
+                                alpha: 0.5,
+                              ),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          color: isMetronomeOn
+                              ? colorScheme.primary
+                              : colorScheme.outlineVariant,
+                          width: 1,
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.speed_rounded,
+                            size: isCompact ? 10 : 12,
+                            color: isMetronomeOn
+                                ? colorScheme.primary
+                                : colorScheme.onSurfaceVariant,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            isMetronomeOn ? '$spm SPM' : 'CADENCE',
+                            style: TextStyle(
+                              fontSize: isCompact ? 9 : 10,
+                              fontWeight: FontWeight.w700,
+                              color: isMetronomeOn
+                                  ? colorScheme.primary
+                                  : colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
               ),
               Container(
                 padding: EdgeInsets.symmetric(

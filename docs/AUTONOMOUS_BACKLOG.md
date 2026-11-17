@@ -24,7 +24,7 @@ This document maintains 25 high-value engineering upgrades for the Fitone mobile
 - [x] **Sprint 06: Wilks & DOTS Powerlifting Score Calculator**
   - Implement standard Wilks-2 and DOTS powerlifting coefficient calculators using bodyweight, gender, and total compound volume (Squat + Bench + Deadlift).
 
-- [ ] **Sprint 07: Audio Cadence Metronome for Running**
+- [x] **Sprint 07: Audio Cadence Metronome for Running**
   - Add a rhythmic audio and visual metronome (160 to 190 SPM) inside the GPS run tracker to guide optimal running cadence and reduce ground contact impact time.
 
 - [ ] **Sprint 08: Water Intake Goal Auto-Adjustment Engine**
