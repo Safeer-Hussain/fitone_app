@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Comprehensive unit test suite (`water_goal_adjustment_test.dart`) and widget test suite (`water_goal_adjustment_widget_test.dart`) verifying 100% calculation accuracy and 800x360 landscape safety.
 - **Automated Release Workflow**:
   - GitHub Actions release pipeline (`.github/workflows/release.yml`) to automatically compile `flutter build apk --release` and publish `app-release.apk` to GitHub Releases on version tags.
+  - Added `--android-skip-build-dependency-validation` to CI release workflow to ensure reliable Gradle builds without dependency version mismatch interruptions.
 
 ### Changed
 - Incremented package version to `1.0.1+2`.
