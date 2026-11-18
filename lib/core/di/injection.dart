@@ -75,7 +75,11 @@ Future<void> configureDependencies() async {
     () => WorkoutLoggerStore(workoutRepository: sl()),
   );
   sl.registerLazySingleton<NutritionStore>(
-    () => NutritionStore(nutritionRepository: sl()),
+    () => NutritionStore(
+      nutritionRepository: sl(),
+      runningRepository: sl(),
+      ringRepository: sl(),
+    ),
   );
   sl.registerLazySingleton<FastingStore>(() => FastingStore());
   sl.registerLazySingleton<GpsRunningStore>(

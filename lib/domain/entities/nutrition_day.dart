@@ -131,4 +131,26 @@ class DailyNutritionSummary {
   double get waterProgress => targetWaterMl > 0
       ? (consumedWaterMl / targetWaterMl).clamp(0.0, 1.0)
       : 0.0;
+
+  DailyNutritionSummary copyWith({
+    String? dateStr,
+    double? targetCalories,
+    double? targetProteinG,
+    double? targetCarbsG,
+    double? targetFatG,
+    int? targetWaterMl,
+    List<NutritionLogItem>? mealItems,
+    List<HydrationLogItem>? waterItems,
+  }) {
+    return DailyNutritionSummary(
+      dateStr: dateStr ?? this.dateStr,
+      targetCalories: targetCalories ?? this.targetCalories,
+      targetProteinG: targetProteinG ?? this.targetProteinG,
+      targetCarbsG: targetCarbsG ?? this.targetCarbsG,
+      targetFatG: targetFatG ?? this.targetFatG,
+      targetWaterMl: targetWaterMl ?? this.targetWaterMl,
+      mealItems: mealItems ?? this.mealItems,
+      waterItems: waterItems ?? this.waterItems,
+    );
+  }
 }

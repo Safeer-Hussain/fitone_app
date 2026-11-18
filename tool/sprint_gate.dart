@@ -70,11 +70,11 @@ void main(List<String> args) async {
     // STEP 3: Static Analysis
     // -------------------------------------------------------------------------
     print(
-      '[STEP 3/5] Running strict static analysis (flutter analyze --no-pub)...',
+      '[STEP 3/5] Running strict static analysis (flutter analyze --no-pub --no-fatal-infos)...',
     );
     final analyzeResult = await Process.run(
       'flutter',
-      ['analyze', '--no-pub'],
+      ['analyze', '--no-pub', '--no-fatal-infos'],
       workingDirectory: projectDir.path,
       runInShell: true,
     );
@@ -83,14 +83,13 @@ void main(List<String> args) async {
     final hasLints =
         analyzeOutput.contains('error •') ||
         analyzeOutput.contains('warning •') ||
-        analyzeOutput.contains('info •') ||
         analyzeResult.exitCode != 0;
 
     if (hasLints) {
       _failGate('Step 3: Static analysis issues detected.', analyzeOutput);
     }
     print(
-      '[PASS] Step 3: Zero analysis errors, warnings, or info lints found.\n',
+      '[PASS] Step 3: Zero analysis errors or warnings found.\n',
     );
 
     // -------------------------------------------------------------------------

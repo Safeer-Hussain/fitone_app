@@ -27,7 +27,7 @@ This document maintains 25 high-value engineering upgrades for the Fitone mobile
 - [x] **Sprint 07: Audio Cadence Metronome for Running**
   - Add a rhythmic audio and visual metronome (160 to 190 SPM) inside the GPS run tracker to guide optimal running cadence and reduce ground contact impact time.
 
-- [ ] **Sprint 08: Water Intake Goal Auto-Adjustment Engine**
+- [x] **Sprint 08: Water Intake Goal Auto-Adjustment Engine**
   - Dynamically calculate and adjust the daily water target based on running distance logged today (+350ml per 5km) and wearable ambient skin temperature delta.
 
 - [ ] **Sprint 09: Barbell Warmup Set Auto-Calculator**
